@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    volumes:
+      - static_volume:/store-backend/store_backend/static:rw
+      - media_volume:/store-backend/store_backend/media:rw
+    image: store-backend
+    container_name: store_backend
+    expose:
+      - 8000
+    restart: "on-failure"
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/store-backend/store_backend/static:rw
+      - media_volume:/store-backend/store_backend/media:rw
+    ports:
+      - 1000:80
+    depends_on:
+      - web
+    restart: "on-failure"
+
+volumes:
+  static_volume:
+  media_volume:
